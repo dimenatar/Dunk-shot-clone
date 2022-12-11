@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e4ff148d2b2e6041921080193999470, type: 3}
+  m_Name: Hoops Settings
+  m_EditorClassIdentifier: 
+  _hoops:
+  - _hoopType: 0
+    _minLevelOrderToSpawn: 0
+    _chanceToSpawn: 1
+    _prefab: {fileID: 131602731933955769, guid: 8fae6d8812425994bbac8309ea8ae9d0, type: 3}

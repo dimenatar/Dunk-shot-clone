@@ -176,5 +176,13 @@ public static class Extensions
 
         gameObject.GetComponents<Transform>().ToList().ForEach(child => child.gameObject.layer = layer);
     }
+
+    public static IEnumerable<float> FloatRange(float min, float max, float step)
+    {
+        for (float value = min; value <= max; value += step)
+        {
+            yield return value;
+        }
+    }
 }
 

@@ -8,10 +8,13 @@ public class InputManager : MonoBehaviour
     private bool _isHolding;
     public bool _isEditor;
 
+    private Camera _camera;
+
     public bool IsHolding => _isHolding;
 
     public event Action OnMouseDown;
     public event Action OnMouseUp;
+
 
     private void Awake()
     {
@@ -20,6 +23,8 @@ public class InputManager : MonoBehaviour
 #else
         _isEditor = false;
 #endif
+
+        _camera = Camera.main;
     }
 
     void Update()
@@ -60,5 +65,10 @@ public class InputManager : MonoBehaviour
     public Vector3 GetMousePosition()
     {
         return _isEditor ? Input.mousePosition : (Input.touchCount > 0 ? (Vector3)Input.GetTouch(0).position : Vector3.zero);
+    }
+
+    public Vector3 GetWorldPosition()
+    {
+        return _camera.ScreenToWorldPoint(GetMousePosition());
     }
 }
