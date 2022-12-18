@@ -14,6 +14,8 @@ public class HoopsController : MonoBehaviour
     private Hoop _currentHoop;
     private int _index;
 
+    public int Index => _index;
+
     public static event Action BallAdded;
 
     private void Awake()

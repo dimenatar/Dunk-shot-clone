@@ -7,6 +7,7 @@ public class TrajectoryProjection : MonoBehaviour, IBallReceiver
 {
     [SerializeField] private DragController _dragController;
 
+    [SerializeField] private LayerMask _obstacles;
     [SerializeField] private Transform _ball;
 
     [SerializeField] private float _force = 0f;
@@ -75,7 +76,7 @@ public class TrajectoryProjection : MonoBehaviour, IBallReceiver
 
         if (_isSimulating && _startPosition != null && _dragController.CurrentDrag >= _dragController.MinDrag)
         {
-            SimulatePath(transform.gameObject, _ball.up * _force, _drag);
+            SimulatePath(transform.gameObject, _ball.up * _force, _drag, _maxIterations);
         }
         else
         {
@@ -89,7 +90,7 @@ public class TrajectoryProjection : MonoBehaviour, IBallReceiver
         _startPosition = null;
     }
 
-    private void SimulatePath(GameObject obj, Vector3 forceDirection, float drag)
+    private void SimulatePath(GameObject obj, Vector3 forceDirection, float drag, float maxIterations)
     {
         float timestep = Time.fixedDeltaTime;
 
@@ -107,15 +108,28 @@ public class TrajectoryProjection : MonoBehaviour, IBallReceiver
 
         var nextPosition = _startPosition.Value;
 
-        for (int i = 0; i < _maxIterations && numSegments < maxSegmentCount; i++)
+        for (int i = 0; i < maxIterations && numSegments < maxSegmentCount; i++)
         {
             velocity += gravity;
             velocity *= stepDrag;
+
+            var casted = Physics2D.RaycastAll(nextPosition, velocity - nextPosition, Vector3.Distance(nextPosition, velocity), _obstacles);
+
+            if (casted.Length > 0)
+            {
+                Debug.DrawRay(nextPosition, velocity, Color.red, 1f);
+
+                velocity = Vector3.Reflect(velocity + Vector3.up/3, casted[0].normal) * _ball.GetComponent<Rigidbody2D>().sharedMaterial.bounciness / 4;
+
+                //SimulatePath(obj, Vector3.Reflect(nextPosition - velocity, casted[0].normal), drag, maxIterations - i);
+            }
 
             nextPosition += velocity;
 
             if (i % _segmentStepModulo == 0)
             {
+
+
                 segments[numSegments] = nextPosition;
                 numSegments++;
             }

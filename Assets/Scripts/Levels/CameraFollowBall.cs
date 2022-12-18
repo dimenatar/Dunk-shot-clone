@@ -17,6 +17,7 @@ public class CameraFollowBall : MonoBehaviour, IBallReceiver
 
     private void LateUpdate()
     {
+        if (Time.timeScale > 0)
         FollowBall();
     }
 
