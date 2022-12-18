@@ -20,6 +20,8 @@ public class HoopSpawner : MonoBehaviour
         
         var hoop = Instantiate(hoopPrefab.Prefab, new Vector3(xPosition, currentYPos + _yOffset), Quaternion.identity);
 
+        hoop.SetActive(false);
+        hoop.transform.ScaleIn();
         hoop.GetComponent<Hoop>().BallEntered += triggerCallback;
     }
 
@@ -46,8 +48,6 @@ public class HoopSpawner : MonoBehaviour
     private float GetXPosition(float pastXPosition)
     {
         float newXPosition = Extensions.FloatRange(_xBounds.x, _xBounds.y, 0.1f).Where(number => !(number >= pastXPosition - _minXDeltaBetweenHoops && number <= pastXPosition + _minXDeltaBetweenHoops)).ToList().GetRandom();
-
-        print($"Past {pastXPosition} New {newXPosition}");
 
         return newXPosition;
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public class TrajectoryProjection : MonoBehaviour
+public class TrajectoryProjection : MonoBehaviour, IBallReceiver
 {
     [SerializeField] private DragController _dragController;
 
@@ -30,12 +30,43 @@ public class TrajectoryProjection : MonoBehaviour
         DragController.DragStarted += StartSimulating;
         DragController.DragEnded += StopSimulating;
         DragController.DragChanged += SetCurrentForce;
+        BallSpawner.BallSpawned += SetBall;
+        BallSkinConrtoller.SkinChanged += SetBall;
     }
 
 
     private void Update()
     {
         ManageDrag();
+    }
+
+    private void OnDestroy()
+    {
+        DragController.DragStarted -= StartSimulating;
+        DragController.DragEnded -= StopSimulating;
+        DragController.DragChanged -= SetCurrentForce;
+        BallSpawner.BallSpawned -= SetBall;
+        BallSkinConrtoller.SkinChanged -= SetBall;
+    }
+
+    public void SetStartPosition(Vector3 startPosition)
+    {
+        _startPosition = startPosition;
+    }
+
+    public void SetCurrentForce(float force)
+    {
+        _force = force;
+    }
+
+    public void SetBall(GameObject ball)
+    {
+        _ball = ball.transform;
+    }
+
+    private void StartSimulating()
+    {
+        _isSimulating = true;
     }
 
     private void ManageDrag()
@@ -50,28 +81,6 @@ public class TrajectoryProjection : MonoBehaviour
         {
             lineRenderer.Clear();
         }
-    }
-
-    private void OnDestroy()
-    {
-        DragController.DragStarted -= StartSimulating;
-        DragController.DragEnded -= StopSimulating;
-        DragController.DragChanged -= SetCurrentForce;
-    }
-
-    public void SetStartPosition(Vector3 startPosition)
-    {
-        _startPosition = startPosition;
-    }
-
-    public void SetCurrentForce(float force)
-    {
-        _force = force;
-    }
-
-    private void StartSimulating()
-    {
-        _isSimulating = true;
     }
 
     private void StopSimulating()

@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DragController : MonoBehaviour
+public class DragController : MonoBehaviour, IBallReceiver
 {
-    [SerializeField] private Rigidbody2D _ball;
 
     [SerializeField] private InputManager _inputManager;
 
@@ -13,6 +12,8 @@ public class DragController : MonoBehaviour
     [SerializeField] private float _minDrag = 1f;
     [SerializeField] private float _maxDrag = 50f;
 
+    private Rigidbody2D _ball;
+    private BallForce _ballForce;
     private Vector2 _startTouchPosition;
 
     private const int _baseScreenHeight = 1920;
@@ -33,6 +34,8 @@ public class DragController : MonoBehaviour
     {
         _inputManager.OnMouseDown += StartDrag;
         _inputManager.OnMouseUp += EndDrag;
+        BallSpawner.BallSpawned += SetBall;
+        BallSkinConrtoller.SkinChanged += SetBall;
     }
 
     private void Update()
@@ -45,6 +48,20 @@ public class DragController : MonoBehaviour
 
             DragChanged?.Invoke(_currentDrag);
         }
+    }
+
+    private void OnDestroy()
+    {
+        _inputManager.OnMouseDown -= StartDrag;
+        _inputManager.OnMouseUp -= EndDrag;
+        BallSpawner.BallSpawned -= SetBall;
+        BallSkinConrtoller.SkinChanged -= SetBall;
+    }
+
+    public void SetBall(GameObject ball)
+    {
+        _ball = ball.GetComponent<Rigidbody2D>();
+        _ballForce = ball.GetComponent<BallForce>();
     }
 
     private void StartDrag()
@@ -61,6 +78,11 @@ public class DragController : MonoBehaviour
     {
         _isDragging = false;
         DragEnded?.Invoke();
+
+        if (CurrentDrag >= MinDrag)
+        {
+            _ballForce.AddForce(CurrentDrag);
+        }
     }
 
     private float GetForceByCurrentPosition()

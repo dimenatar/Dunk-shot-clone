@@ -2,16 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollowBall : MonoBehaviour
+public class CameraFollowBall : MonoBehaviour, IBallReceiver
 {
     [SerializeField] private Transform _camera;
     [SerializeField] private Transform _ball;
 
     [SerializeField] private float _yOffset = 1f;
 
+    private void Awake()
+    {
+        BallSpawner.BallSpawned += SetBall;
+        BallSkinConrtoller.SkinChanged += SetBall;
+    }
+
     private void LateUpdate()
     {
         FollowBall();
+    }
+
+    private void OnDestroy()
+    {
+        BallSpawner.BallSpawned -= SetBall;
+        BallSkinConrtoller.SkinChanged -= SetBall;
+    }
+
+    public void SetBall(GameObject ball)
+    {
+        _ball = ball.transform;
     }
 
     private void FollowBall()

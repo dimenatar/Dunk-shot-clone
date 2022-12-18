@@ -12,6 +12,8 @@ public class ProgressLoader : MonoBehaviour
 
     [SerializeField] private int _minRandomLevel = 5;
 
+    private const string IS_COMPLETED = "IsCompleted";
+    private const string SCENE_NAME = "LevelName";
     private const string LEVEL_NAME = "Level ";
     private const string BONUS_NAME = "Bonus ";
     private const string SCENE_NAME_KEY = "Scene";
@@ -25,14 +27,14 @@ public class ProgressLoader : MonoBehaviour
 
     public void LoadScene()
     {
-        if (_progressManager.IsCompletedAllLevels())
+        if ((bool)ProgressManager.GetValue(IS_COMPLETED, false))
         {
             print("Loading random scene");
             LoadRandomLevel(SceneManager.GetActiveScene().name);
             return;
         }
 
-        string sceneName = ProgressManager.GetCurrentSceneName();
+        string sceneName = (string)ProgressManager.GetValue(SCENE_NAME, "Level 1");
 
         print(sceneName);
         if (sceneName != "Level 1")

@@ -17,3 +17,7 @@ MonoBehaviour:
     _minLevelOrderToSpawn: 0
     _chanceToSpawn: 1
     _prefab: {fileID: 131602731933955769, guid: 8fae6d8812425994bbac8309ea8ae9d0, type: 3}
+  - _hoopType: 1
+    _minLevelOrderToSpawn: 3
+    _chanceToSpawn: 0.5
+    _prefab: {fileID: 131602731933955769, guid: 3e5de3e5bad0c7942a3725fb979841a1, type: 3}

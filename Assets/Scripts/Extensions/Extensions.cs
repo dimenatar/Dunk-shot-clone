@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public static class Extensions
 {
@@ -67,6 +68,11 @@ public static class Extensions
     public static Tween DOAlpha(this Image image, float alpha, float duration = 0.5f)
     {
         return image.DOColor(GetColorWithAlpha(image.color, alpha), duration);
+    }
+
+    public static Tween DOAlpha(this TextMeshProUGUI text, float alpha, float duration = 0.5f)
+    {
+        return text.DOColor(GetColorWithAlpha(text.color, alpha), duration);
     }
 
     public static Tween DOPulse(this Transform transform, float minScale = 1, float maxScale = 1.2f, float scaleInDuration = 0.25f, float scaleOutDuration = 0.25f, int loops = -1, bool update = false)

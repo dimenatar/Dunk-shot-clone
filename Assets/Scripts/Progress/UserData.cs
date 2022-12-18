@@ -5,19 +5,37 @@ public class UserData
 {
     public UserData()
     {
-        CurrentLevelOrder = 1;
-        CurrentSceneName = "Level 1";
-        IsCompletedAllLevels = false;
-        Keys = new List<string>();
+        _pairs = new Dictionary<string, object>();
     }
 
-    public int CurrentLevelOrder;
-    public string CurrentSceneName;
-    public bool IsCompletedAllLevels;
-    public List<string> Keys;
+    public Dictionary<string, object> _pairs;
 
-    public override string ToString()
+    public int Temp;
+
+    public void SetItem(string tag, object item)
     {
-        return $"CurrentLevelOrder {CurrentLevelOrder} Scene {CurrentSceneName} Completed {IsCompletedAllLevels}";
+        if (!_pairs.ContainsKey(tag))
+        {
+            _pairs.Add(tag, item);
+        }
+        else
+        {
+            _pairs[tag] = item;
+        }
+    }
+
+    public object GetValue(string tag, object defaultValue = null)
+    {
+        if (!_pairs.ContainsKey(tag))
+        {
+            _pairs.Add(tag, defaultValue);
+        }
+
+        return _pairs[tag];
+    }
+
+    public bool ContainsKey(string key)
+    {
+        return _pairs.ContainsKey(key);
     }
 }

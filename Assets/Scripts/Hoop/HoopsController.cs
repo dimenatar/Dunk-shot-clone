@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +14,8 @@ public class HoopsController : MonoBehaviour
     private Hoop _currentHoop;
     private int _index;
 
+    public static event Action BallAdded;
+
     private void Awake()
     {
         _currentHoop = _hoops[0];
@@ -21,7 +25,7 @@ public class HoopsController : MonoBehaviour
 
     private void Update()
     {
-        if (_inputManager.IsHolding)
+        if (_inputManager.IsHolding && Time.timeScale > 0)
         {
             RotateCurrentHoop();
         }
@@ -34,7 +38,11 @@ public class HoopsController : MonoBehaviour
 
     private void UpdateCurrentHoop(Hoop hoop)
     {
-        _currentHoop.transform.rotation = Quaternion.identity;
+        if (_currentHoop == hoop) return;
+
+        BallAdded?.Invoke();
+
+        _currentHoop.transform.ScaleOutWithDiactivation();
 
         _currentHoop = hoop;
         _index++;
