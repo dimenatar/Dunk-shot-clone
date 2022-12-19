@@ -1,14 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class BallForce : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rb;
 
+    public static event Action Collision;
+
     private void Awake()
     {
         _rb.bodyType = RigidbodyType2D.Kinematic;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Collision?.Invoke();
     }
 
     public void SetStatic(bool isStatic)
