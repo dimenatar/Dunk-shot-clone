@@ -38,6 +38,7 @@ public class TrajectoryProjection : MonoBehaviour, IBallReceiver
 
     private void Update()
     {
+        if (Time.timeScale > 0f)
         ManageDrag();
     }
 

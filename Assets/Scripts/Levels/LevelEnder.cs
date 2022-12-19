@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class LevelEnder : MonoBehaviour
 {
-    [SerializeField] private ObjectScaler _scaler;
+    [SerializeField] private HoopsController _controller;
+    [SerializeField] private LevelRestarter _levelRestarter;
+
     [SerializeField] private EndPanel _endPanel;
 
     private bool _isShown;
@@ -14,12 +16,12 @@ public class LevelEnder : MonoBehaviour
 
     private void Awake()
     {
-
+        DeathZone.BallEntered += CheckForLose;
     }
 
     private void OnDestroy()
     {
-
+        DeathZone.BallEntered -= CheckForLose;
     }
 
     private void OnLevelFailed()
@@ -40,8 +42,6 @@ public class LevelEnder : MonoBehaviour
         {
             _isShown = true;
 
-            _scaler.UnSclale(update: true);
-
             LevelEnded?.Invoke();
 
             Time.timeScale = 0f;
@@ -52,5 +52,18 @@ public class LevelEnder : MonoBehaviour
     private void ShowPanel(bool isWin)
     {
         _endPanel.ShowPanel(isWin);
+    }
+
+    private void CheckForLose()
+    {
+        if (_controller.Index == 0)
+        {
+            _levelRestarter.Restart();
+        }
+        else
+        {
+            OnLevelFailed();
+            Time.timeScale = 0;
+        }
     }
 }
